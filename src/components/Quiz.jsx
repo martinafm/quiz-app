@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import QUESTIONS from '../questions.js';
 import quizCompletedImg from '../assets/quiz-complete.png';
+import Question from './Question.jsx';
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
@@ -8,7 +9,7 @@ export default function Quiz() {
   const activeQuestionIndex = userAnswers.length;
 
   const isQuizCompleted = QUESTIONS.length === activeQuestionIndex;
-
+ 
   const handleSelectAnswer = useCallback(function handleSelectAnswer(selectedAnswer) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer];
@@ -26,23 +27,14 @@ export default function Quiz() {
     );
   }
 
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
   return (
     <div id="quiz">
-      <div id="question">
-        <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
-        <ul id="answers">
-          {shuffledAnswers.map((answer) => (
-            <li key={answer} className="answer">
-              <button onClick={() => handleSelectAnswer(answer)}>
-                {answer}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Question
+        key={activeQuestionIndex}
+        index={activeQuestionIndex}
+        onSelectAnswer={handleSelectAnswer}
+        onSkipAnswer={handleSkipAnswer}
+      />
     </div>
   );
 }
